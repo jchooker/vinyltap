@@ -1,0 +1,59 @@
+﻿:root {
+  --malla-font: 'Mallanna', sans-serif;
+  --pacif-font: 'Pacifico', cursive;
+  --hot-pink: #FF69B4;
+  --maize: #FBEC5D;
+  --blue-gray: #7393B3;
+}
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+.socials a:first-child {
+  margin-right: 0.15rem;
+}
+
+.socials a:nth-child(2) {
+  margin-right: 0.25rem;
+}
+
+.socials a, .socials a:visited {
+  text-decoration: none;
+  color: hsla(0, 100%, 10%, 0.5);
+}
+
+html {
+  font-size: 14px;
+}
+
+nav {
+  background-color: var(--maize);
+}
+
+.nav-icon {
+  width: 3.5rem;
+  margin: 0 0.25rem 0.25rem 0;
+}
+
+.navbar-nav li a {
+  font-family: var(--malla-font);
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.navbar-nav svg {
+  margin-right: 8px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
