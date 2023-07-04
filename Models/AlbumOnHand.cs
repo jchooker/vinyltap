@@ -6,10 +6,11 @@ namespace VinylTap.Models
     {
         public int Id { get; set; }
         [ForeignKey("Album")]
-        public int ParentId { get; set; }
+        public int AlbumId { get; set; }
         public Album Album { get; set; } //need instance of parent class to complete foreign key assignation
         public enum AlbumCondition { Mint, NearMint, VeryGoodPlus, VeryGood, GoodPlus, Good, Fair, Poor }
-        public (double AlbumPrice, string Currency) AlbumPriceWithCurrency { get; set; }
-        public int NumAlbumsAvailableForSale { get; set; }
+        //consider what data types to use for albums where each condition has its own price
+        public double AlbumPrice { get; set; }
+        public string CurrencyType { get; set; }
     }
 }

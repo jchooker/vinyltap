@@ -12,6 +12,8 @@ namespace VinylTap.Models
         public string AlbumGenre { get; set; }
         public string AlbumLabel { get; set; }
         public string? AlbumCover { get; set; }
+        public int NumAlbumsAvailableForSale { get; set; }
+        public ICollection<AlbumOnHand> AlbumsOnHand { get; set; }
         
     }
 }

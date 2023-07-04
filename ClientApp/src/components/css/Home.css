@@ -1,0 +1,9 @@
+input.input-img-placeholder {
+    background: url('https://i.ibb.co/D91NNpC/vt-imgmix5.png') right center/30% no-repeat; /* try some version of https://www.geeksforgeeks.org/css-to-put-icon-inside-an-input-element-in-a-form/# */
+    /*25-30px is good, put all of the ones you want into an image with the offset built in on the right, width:? height:25-30px*/
+    /*build transparency into image file as well*/
+    /*NEED RESPONSIVE VERSION OF THIS "BLEND" IMAGE!*/
+}
+/* input.input-img-placeholder img {
+    opacity: 0.6;
+} */

@@ -1,26 +1,53 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using OAuth;
+using Flurl.Http;
 
 namespace VinylTap.Controllers
 {
-    [Route("[controller]")]
+    [ApiController]
+    [Route("api/[controller]")]
     public class AlbumsController : Controller
     {
-        private readonly ILogger<AlbumsController> _logger;
+        private static string _apiBaseUrl = "https://api.discogs.com/";
+        private readonly IConfiguration _configuration;
 
-        public AlbumsController(ILogger<AlbumsController> logger)
+        public AlbumsController(IConfiguration configuration)
         {
-            _logger = logger;
+            _configuration = configuration;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            //var client = clientFactory.CreateClient("VinylTapAPI");
+            //await client.GetAsync("api/albums");
+            // string auth = oauthClient.GetAuthorizationHeader();
+            // HttpWebRequest request = (HttpWebRequest) WebRequest.Create(oauthClient.RequestUrl);
+
+            // request.Headers.Add("Authorization", auth);
             return View();
+        }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> GeneralSearch(string query)
+        {
+            // var response = await _httpClient.GetAsync($"/database/search?query={query}");
+            var requestUrl =  _apiBaseUrl + $"database/search?query={query}";
+
+            var client = new OAuthRequest
+            {
+                Method = "GET",
+                Type = OAuthRequestType.ProtectedResource,
+                SignatureMethod = OAuthSignatureMethod.PlainText,
+                ConsumerKey = _configuration["CONSUMER_KEY"],
+                ConsumerSecret = _configuration["CONSUMER_SECRET"],
+                Token = _configuration["OAUTH_TOKEN"],
+                TokenSecret = _configuration["OAUTH_TOKEN_SECRET"],
+                RequestUrl = _apiBaseUrl + $"database/search?query={query}",
+            };
+            Console.WriteLine(client.GetAuthorizationQuery());
+            var url = requestUrl + client.GetAuthorizationQuery();
+            var result = await url.GetStringAsync();
+            return Ok(result);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

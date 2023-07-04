@@ -1,12 +1,32 @@
 using Microsoft.EntityFrameworkCore;
+using VinylTap.Extensions;
+using System.Reflection;
+//using OAuth;
 using VinylTap.ClientApp.Data;
 
+var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.Sources.Clear();
+
+builder.Configuration
+    .AddUserSecrets(Assembly.GetEntryAssembly()!)
+    .AddEnvironmentVariables()
+    .AddDotEnvFile();
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<AlbumContext>(options => options.UseSqlite("Data Source=database.db"));
+builder.Services.AddDbContext<AlbumContext>(options => {
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = "OAuth";
+    options.DefaultChallengeScheme = "OAuth";
+});
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 // import { fab, faFacebookSquare } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faUsers, faHome, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
-import './NavMenu.css';
+import './css/NavMenu.css';
 
 export class NavMenu extends Component {
   static displayName = NavMenu.name;

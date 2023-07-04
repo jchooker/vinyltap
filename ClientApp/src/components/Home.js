@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import './css/Home.css';
 
 export class Home extends Component {
   static displayName = Home.name;
+
+
 
   render() {
     return (
@@ -15,7 +18,7 @@ export class Home extends Component {
             <form>
               <div className='row'>
                 <div className='col-9'>
-                  <input type="search" placeholder='Explore artists, albums, genres and more!' className='form-control'/>
+                  <input type="search" placeholder="Explore artists, albums, genres and more!" className='form-control input-img-placeholder'/>
                 </div>
                 <div className='d-grid col-2'>
                   <button type='submit' className='btn btn-success'>Search</button>
