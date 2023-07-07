@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
-// import { fab, faFacebookSquare } from '@fortawesome/free-brands-svg-icons'
+import { faFacebookSquare, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faUsers, faHome, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import './css/NavMenu.css';
@@ -32,9 +32,9 @@ export class NavMenu extends Component {
             <NavbarBrand tag={Link} to="/"><img src='https://i.ibb.co/71b6j63/LP-icon-1.png' className='nav-icon' alt='disc-icon-1' title='disc-icon-1'></img>VinylTap</NavbarBrand>
             <div className='row'>
               <div className='col d-flex align-items-end socials'>
-                <a href='#'><FontAwesomeIcon icon={['fab', 'fa-twitter']}></FontAwesomeIcon></a>
-                <a href='#'><FontAwesomeIcon icon={['fab', 'fa-instagram']}></FontAwesomeIcon></a>
-                <a href='#'><FontAwesomeIcon icon={['fab', 'fa-facebook-square']}></FontAwesomeIcon></a>
+                <a href='#'><FontAwesomeIcon icon={faTwitter}></FontAwesomeIcon></a>
+                <a href='#'><FontAwesomeIcon icon={faInstagram}></FontAwesomeIcon></a>
+                <a href='#'><FontAwesomeIcon icon={faFacebookSquare}></FontAwesomeIcon></a>
               </div>
             </div>
           </div>

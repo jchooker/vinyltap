@@ -36,6 +36,7 @@ namespace VinylTap.Extensions
                     if (parts.Length == 2)
                     {
                         Data[parts[0]] = parts[1];
+                        Console.WriteLine($"Added {parts[0]} to configuration");
                     }
                 }
             }

@@ -17,7 +17,7 @@ const ConfigForm = () => {
 
     const checkEnvFile = async () => {
         try {
-            const response = await axios.get('/api/envfile');
+            const response = await axios.get('api/envfile');
         } catch (err) {
             console.error(err);
         }
@@ -29,8 +29,8 @@ const ConfigForm = () => {
         try {
             const config = {consumerKey, consumerSecret, oAuthToken, oAuthTokenSecret};
 
-            await axios.post('/api/configuration', config);
-
+            await axios.post('api/configuration', config);
+            // ^^reinsert forward slash before api here and elsewhere?
             console.log("Config saved");
         } catch (err) {
             console.error(err);

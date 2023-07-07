@@ -8,7 +8,7 @@ var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.Sources.Clear();
+// builder.Configuration.Sources.Clear();
 
 builder.Configuration
     .AddUserSecrets(Assembly.GetEntryAssembly()!)
@@ -26,6 +26,13 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = "OAuth";
     options.DefaultChallengeScheme = "OAuth";
 });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+        builder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
 builder.Services.AddHttpClient();
 
 var app = builder.Build();
@@ -40,12 +47,19 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseCors("AllowAll");
 
-
-app.MapControllerRoute(
+app.UseEndpoints(endpoints => {
+    endpoints.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
 
+    endpoints.MapControllerRoute(
+    name: "api",
+    pattern: "{controller}/{action}/{query?}");
+});
+
 app.MapFallbackToFile("index.html");
+
 
 app.Run();
