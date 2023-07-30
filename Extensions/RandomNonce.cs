@@ -3,7 +3,9 @@ namespace VinylTap.Extensions
     public static class RandomNonce
     {
         public static string FormNonce() {
-            return FormChunk(8) + "-" + FormChunk(4) + "-" + FormChunk(4) + "-" + FormChunk(4) + "-" + FormChunk(12);
+            string fullNonce = FormChunk(8) + "-" + FormChunk(4) + "-" + FormChunk(4) + "-" + FormChunk(4) + "-" + FormChunk(12);
+            Console.WriteLine(fullNonce);
+            return fullNonce;
         }
 
         private static string FormChunk(int chunkLength) {
@@ -13,7 +15,7 @@ namespace VinylTap.Extensions
                 if(minMax[0] == 0) {
                     Random rand = new Random();
                     int randNum = rand.Next(minMax[0], minMax[1] + 1);
-                    chunk += (char)randNum;
+                    chunk += randNum.ToString();
                 } else {
                     Random rand = new Random();
                     int randNum = rand.Next(minMax[0], minMax[1] + 1);

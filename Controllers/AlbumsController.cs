@@ -3,6 +3,7 @@ using OAuth;
 using Flurl.Http;
 using VinylTap.Extensions;
 using System.Net.Http.Headers;
+using System.Net;
 
 namespace VinylTap.Controllers
 {
@@ -10,12 +11,14 @@ namespace VinylTap.Controllers
     [Route("api")]
     public class AlbumsController : Controller
     {
-        private static string _apiBaseUrl = "https://api.discogs.com/";
+        private static readonly string _apiBaseUrl = "https://api.discogs.com/";
         private readonly IConfiguration _configuration;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public AlbumsController(IConfiguration configuration)
+        public AlbumsController(IConfiguration configuration, IHttpClientFactory clientFactory)
         {
             _configuration = configuration;
+            _httpClientFactory = clientFactory;
         }
 
         public async Task<IActionResult> Index()
@@ -29,13 +32,19 @@ namespace VinylTap.Controllers
             return View();
         }
 
-        [HttpGet("search/{query}")]
-        public async Task<IActionResult> GeneralSearch([FromBody]string query)
+        [HttpGet("search")]
+        [Produces("application/json")]
+        // [Produces("application/x-www-form-urlencoded")]
+        // public async Task<IActionResult> GeneralSearch([FromQuery(Name = "q")]string query)
+        public async Task<IActionResult> GeneralSearch([FromQuery]string query)
         {
             // var response = await _httpClient.GetAsync($"/database/search?query={query}");
-            var requestUrl =  _apiBaseUrl + $"database/search?query={query}";
 
-            var _client = new HttpClient();
+
+            //latest version begin
+            var requestUrl =  _apiBaseUrl + $"database/search?q={query}";
+
+            var _client = _httpClientFactory.CreateClient();
             var _request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
 
             _request.Headers.Add("User-Agent", "VinylTap 0.1");
@@ -48,7 +57,7 @@ namespace VinylTap.Controllers
             _request.Headers.Add("Authorization", $"OAuth oauth_consumer_key=\"{consumerKey}\",oauth_token=\"{oauthToken}\",oauth_signature_method=\"PLAINTEXT\",oauth_timestamp=\"{unixTimestamp}\",oauth_nonce=\"{nonce}\",oauth_version=\"1.0\",oauth_signature=\"{consumerSecret}%26{oauthTokenSecret}\"");
 
             _request.Headers.Add("Cookie", "__cf_bm=bsXjwChVzPC2ri5USDymMFeQnjWTe.8tD.Gfts82bKo-1688685685-0-Af856wM/p8NnGTIeDzuLvBl4pL87FuaX2doGwpd56V9ePkRtG1fhlyG7DCi3ej+gv5tED9hIUjWQo3Iaxn0o+U8=");
-
+            //^^latest version end
 
             // var client = new OAuthRequest
             // {
@@ -64,12 +73,38 @@ namespace VinylTap.Controllers
             // Console.WriteLine(client.GetAuthorizationQuery());
             // var url = client.RequestUrl + client.GetAuthorizationQuery();
             // var result = await url.GetStringAsync();
+
+
+            //latest version pt 2 begin
             var content = new StringContent(string.Empty);
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            // content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
             _request.Content = content;
             var response = await _client.SendAsync(_request);
-            response.EnsureSuccessStatusCode();
-            return Ok(response);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                return Ok(responseContent);
+            }
+            else
+            {
+                if (response.StatusCode == HttpStatusCode.NotFound) {
+                    return NotFound();
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized) {
+                    return Unauthorized();
+                }
+                else {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    return StatusCode((int)response.StatusCode, responseContent);
+                }
+            }
+            // return BadRequest();
+            // response.EnsureSuccessStatusCode();
+            // return Ok(response);
+            //latest version pt 2 end
+            // return Ok(new { query });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

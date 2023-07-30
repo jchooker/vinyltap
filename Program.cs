@@ -8,6 +8,21 @@ var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options => 
+{ 
+    options.AddPolicy("CorsPolicy", builder => {
+        //builder.SetIsOriginAllowed(s=> true).AllowAnyMethod()
+        builder.AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials()
+        .WithOrigins("https://localhost:7091", "https://localhost:44413");
+        // .AllowAnyOrigin();
+        // options.AddPolicy("AllowAll", builder =>
+        // builder.AllowAnyOrigin()
+        //     .AllowAnyMethod()
+        //     .AllowAnyHeader().WithOrigins("*"));
+    });
+});
 // builder.Configuration.Sources.Clear();
 
 builder.Configuration
@@ -26,13 +41,6 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = "OAuth";
     options.DefaultChallengeScheme = "OAuth";
 });
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", builder =>
-        builder.AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader());
-});
 builder.Services.AddHttpClient();
 
 var app = builder.Build();
@@ -45,19 +53,32 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseDefaultFiles();
 app.UseStaticFiles();
+app.UseCors("CorsPolicy");
 app.UseRouting();
-app.UseCors("AllowAll");
+app.UseAuthentication();
+app.UseAuthorization();
 
-app.UseEndpoints(endpoints => {
-    endpoints.MapControllerRoute(
-    name: "default",
-    pattern: "{controller}/{action=Index}/{id?}");
+// app.UseEndpoints(endpoints => {
+//     endpoints.MapControllerRoute(
+//     name: "default",
+//     pattern: "{controller}/{action=Index}/{id?}");
 
-    endpoints.MapControllerRoute(
-    name: "api",
-    pattern: "{controller}/{action}/{query?}");
+    // endpoints.MapControllerRoute(
+    // name: "api",
+    // pattern: "{controller}/{action}/{query?}");
+// });
+
+// app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
 });
+
+// app.MapControllerRoute(
+//     name: "api",
+//     pattern: "{controller}/{action}/{query?}");
 
 app.MapFallbackToFile("index.html");
 
