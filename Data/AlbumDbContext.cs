@@ -3,9 +3,9 @@ using VinylTap.Models;
 
 namespace VinylTap.ClientApp.Data
 {
-    public class AlbumContext : DbContext
+    public class AlbumDbContext : DbContext
     {
-        public AlbumContext(DbContextOptions options) : base(options)
+        public AlbumDbContext(DbContextOptions options) : base(options)
         {
         }
 

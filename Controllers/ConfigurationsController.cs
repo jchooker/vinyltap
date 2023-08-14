@@ -10,9 +10,9 @@ namespace VinylTap.Controllers
     public class ConfigurationsController : ControllerBase
     {
         private readonly ILogger<ConfigurationsController> _logger;
-        private readonly AlbumContext _context;
+        private readonly AlbumDbContext _context;
 
-        public ConfigurationsController(ILogger<ConfigurationsController> logger, AlbumContext context)
+        public ConfigurationsController(ILogger<ConfigurationsController> logger, AlbumDbContext context)
         {
             _logger = logger;
             _context = context;

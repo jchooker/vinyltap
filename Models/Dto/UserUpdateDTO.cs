@@ -5,9 +5,9 @@ namespace VinylTap.Models
 {
     [Index(nameof(Username), IsUnique = true)]
     [Index(nameof(UserEmailAddress), IsUnique = true)]
-    public class User
+    public class UserUpdateDTO
     {
-        [Key]
+        [Required]
         public int Id { get; set; }
         [Required]
         public string Username { get; set; }
@@ -26,9 +26,8 @@ namespace VinylTap.Models
         public string UserOldTempPassword { get; set; }
         public string UserNewPasswordHash { get; set; }
         public string UserNewTempPassword { get; set; }
-        public string UserProfileImage { get; set; }
+        public string? UserProfileImage { get; set; }
         public string? UserBio { get; set; }
-        public DateTime UserDateCreated { get; set; } = System.DateTime.Now;
-        public DateTime? UserDateModified { get; set; }
+        public DateTime UserDateModified { get; set; }
     }
 }

@@ -78,7 +78,6 @@ namespace VinylTap.Controllers
             //latest version pt 2 begin
             var content = new StringContent(string.Empty);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            // content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
             _request.Content = content;
             var response = await _client.SendAsync(_request);
 
