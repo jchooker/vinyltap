@@ -1,0 +1,16 @@
+﻿:root {
+    --malla-font: 'Mallanna', sans-serif;
+    --pacif-font: 'Pacifico', cursive;
+    --hot-pink: #FF69B4;
+}
+
+body {
+    font-family: var(--malla-font);
+    font-size: 1.25rem;
+}
+
+.navbar-brand {
+    font-family: var(--pacif-font);
+    font-size: 2rem;
+    color: var(--hot-pink);
+}
