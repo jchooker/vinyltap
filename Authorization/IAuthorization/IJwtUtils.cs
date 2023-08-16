@@ -6,6 +6,8 @@ using VinylTap.Helpers;
 
 public interface IJwtUtils
 {
-    public string GenerateToken(User user, IOptions<AppSettings> appSettings);
-    public int? ValidateToken(string token, IOptions<AppSettings> appSettings);
+    // public string GenerateToken(User user, IOptions<AppSettings> appSettings);
+    // public int? ValidateToken(string token, IOptions<AppSettings> appSettings);
+        public string GenerateToken(User user);
+    public int? ValidateToken(string token);
 }

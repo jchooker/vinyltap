@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 namespace VinylTap.Models
 {
     [Index(nameof(Username), IsUnique = true)]
-    [Index(nameof(UserEmailAddress), IsUnique = true)]
+    [Index(nameof(EmailAddress), IsUnique = true)]
     public class UserDTO
     {
         [Key]
@@ -14,16 +14,16 @@ namespace VinylTap.Models
         [Required]
         [MinLength(2)]
         [MaxLength(50)]
-        public string UserFirstName { get; set; }
+        public string FirstName { get; set; }
         [Required]
         [MinLength(2)]
         [MaxLength(50)]
-        public string UserLastName { get; set; }
+        public string LastName { get; set; }
         [Required]
         [EmailAddress]
-        public string UserEmailAddress { get; set; }
-        public string? UserProfileImage { get; set; }
-        public string? UserBio { get; set; }
-        public DateTime UserDateCreated { get; set; } //for "Member since"
+        public string EmailAddress { get; set; }
+        public string? ProfileImage { get; set; }
+        public string? Bio { get; set; }
+        public static DateTime DateCreated { get; set; } //for "Member since"
     }
 }

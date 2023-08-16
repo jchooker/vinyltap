@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using VinylTap.Entities;
 //using VinylTap.Models;
@@ -25,10 +24,10 @@ namespace VinylTap.Data
                 new User 
                 {
                     Id=1,
-                    UserFirstName = "Joseph",
-                    UserLastName = "Hkr",
+                    FirstName = "Joseph",
+                    LastName = "Hkr",
                     Username = "jchooker",
-                    UserEmailAddress = "jch@yyymail.com"
+                    EmailAddress = "jch@yyymail.com"
                 }
             );
         }

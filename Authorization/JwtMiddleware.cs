@@ -1,6 +1,7 @@
 namespace VinylTap.Authorization;
 
 using VinylTap.Services;
+using VinylTap.Authorization.IAuthorization;
 
 public class JwtMiddleware
 {

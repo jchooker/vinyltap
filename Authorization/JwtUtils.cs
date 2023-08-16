@@ -17,10 +17,10 @@ public class JwtUtils : IJwtUtils
         _appSettings = appSettings.Value;
     }
 
-    public string GenerateToken(User user, IOptions<AppSettings> appSettings)
+    public string GenerateToken(User user)
     {
         //jwt valid for 7 days
-        var key = Encoding.ASCII.GetBytes(appSettings.Value.Secret);
+        var key = Encoding.ASCII.GetBytes(_appSettings.Secret); //hopefully this works after changing parameter from "appSettings.Value.Secret"
         var tokenHandler = new JwtSecurityTokenHandler();
         var tokenDescriptor = new SecurityTokenDescriptor
         {
@@ -32,13 +32,13 @@ public class JwtUtils : IJwtUtils
         return tokenHandler.WriteToken(token);
     }
 
-    public int? ValidateToken(string token, IOptions<AppSettings> appSettings)
+    public int? ValidateToken(string token)
     {
         if (token == null)
             return null;
 
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(appSettings.Value.Secret);
+        var key = Encoding.ASCII.GetBytes(_appSettings.Secret); //hopefully this works after changing parameter from "appSettings.Value.Secret"
         try
         {
             tokenHandler.ValidateToken(token, new TokenValidationParameters
