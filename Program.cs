@@ -4,16 +4,22 @@ using System.Reflection;
 //using OAuth;
 using VinylTap.ClientApp.Data;
 using VinylTap.Data;
-using Microsoft.AspNetCore.Identity;
+//using Microsoft.AspNetCore.Identity;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using VinylTap.Authorization;
+using VinylTap.Helpers;
+using VinylTap.Authorization.IAuthorization;
+using VinylTap.Services;
 
 var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 
 var builder = WebApplication.CreateBuilder(args);
 var miscKeys = builder.Configuration["AppSettings:Secret"];
 
-builder.Services.AddCors(options => 
+var services = builder.Services;
+
+services.AddCors(options => 
 { 
     options.AddPolicy("CorsPolicy", builder => {
         builder.AllowAnyMethod()
@@ -31,39 +37,53 @@ builder.Configuration
 
 // Add services to the container.
 
-builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<AlbumDbContext>(options => {
+//builder.Services.AddControllersWithViews();
+services.AddControllers();
+
+services.AddAutoMapper(typeof(Program));
+
+services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
+services.AddScoped<IJwtUtils, JwtUtils>();
+services.AddScoped<IUserService, UserService>();
+
+services.AddDbContext<AlbumDbContext>(options => {
     options.UseSqlite(builder.Configuration.GetConnectionString("AlbumConnection"));
 });
-builder.Services.AddDbContext<UserDbContext>(options => {
+services.AddDbContext<UserDbContext>(options => {
     options.UseSqlite(builder.Configuration.GetConnectionString("UserConnection"));
 });
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<UserDbContext>();
 
-builder.Services.Configure<IdentityOptions>(options =>
-{
-    // Default Password settings.
-    options.Password.RequireDigit = true;
-    options.Password.RequireLowercase = true;
-    options.Password.RequireNonAlphanumeric = true;
-    options.Password.RequireUppercase = true;
-    options.Password.RequiredLength = 6;
-    options.Password.RequiredUniqueChars = 1;
-});
+
+//builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+//    .AddEntityFrameworkStores<UserDbContext>();
+
+//builder.Services.Configure<IdentityOptions>(options =>
+//{
+//    // Default Password settings.
+//    options.Password.RequireDigit = true;
+//    options.Password.RequireLowercase = true;
+//    options.Password.RequireNonAlphanumeric = true;
+//    options.Password.RequireUppercase = true;
+//    options.Password.RequiredLength = 6;
+//    options.Password.RequiredUniqueChars = 1;
+//});
+
+//*********^^^REMOVING IDENTITY SERVICE ENTIRELY??
+
 //builder.Services.AddAuthentication(options =>
 //{
 //    options.DefaultAuthenticateScheme = "OAuth";
 //    options.DefaultChallengeScheme = "OAuth";
 //});
 //v2: both jwt and oauth 1.0a authentication (below)
-builder.Services.AddAuthentication(options =>
+services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = "OAuth";
     options.DefaultChallengeScheme = "OAuth";
 });
 var key = Encoding.ASCII.GetBytes("your-secret-key"); // Replace this with a secure secret key.
-builder.Services.AddAuthentication()
+services.AddAuthentication()
     .AddCookie(options =>
     {
         options.LoginPath = "/auth/unauthorized";
@@ -96,7 +116,7 @@ builder.Services.AddAuthentication()
 //        };
 //    });
 //above is orig version w/ addjwtbearer error
-builder.Services.AddHttpClient();
+services.AddHttpClient();
 
 var app = builder.Build();
 
@@ -114,6 +134,12 @@ app.UseCors("CorsPolicy");
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
+//^^assuming I want to keep custom global error handling
+
+app.UseMiddleware<JwtMiddleware>();
 
 // app.MapControllers();
 app.UseEndpoints(endpoints =>

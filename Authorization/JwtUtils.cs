@@ -48,7 +48,7 @@ public class JwtUtils : IJwtUtils
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ClockSkew = TimeSpan.Zero
-                //^clockskew set to zero to tokens expire right on time
+                //^clockskew set to zero so tokens expire right on time
             }, out SecurityToken validatedToken);
 
             var jwtToken = (JwtSecurityToken)validatedToken;
