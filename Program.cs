@@ -3,7 +3,6 @@ using VinylTap.Extensions;
 using System.Reflection;
 //using OAuth;
 using VinylTap.ClientApp.Data;
-using VinylTap.Data;
 //using Microsoft.AspNetCore.Identity;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
@@ -18,6 +17,12 @@ var builder = WebApplication.CreateBuilder(args);
 var miscKeys = builder.Configuration["AppSettings:Secret"];
 
 var services = builder.Services;
+var env = builder.Environment;
+
+if (env.IsProduction())
+    services.AddDbContext<UserDbContext>();
+else
+    services.AddDbContext<UserDbContext, SqliteDataContext>();
 
 services.AddCors(options => 
 { 
@@ -119,6 +124,12 @@ services.AddAuthentication()
 services.AddHttpClient();
 
 var app = builder.Build();
+
+using (var scope  = app.Services.CreateScope())
+{
+    var dataContext = scope.ServiceProvider.GetRequiredService<UserDbContext>();
+    dataContext.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

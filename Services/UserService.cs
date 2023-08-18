@@ -3,11 +3,9 @@ namespace VinylTap.Services;
 using AutoMapper;
 using BCrypt.Net;
 using VinylTap.Authorization.IAuthorization;
-using VinylTap.Data;
 using VinylTap.Entities;
 using VinylTap.Helpers;
 using VinylTap.Models.Users;
-using VinylTap.Services.IServices;
 
 public class UserService : IUserService
 {

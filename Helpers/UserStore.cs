@@ -1,6 +1,6 @@
 using VinylTap.Models;
 
-namespace VinylTap.Data
+namespace VinylTap.Helpers
 {
     public static class UserStore
     {
